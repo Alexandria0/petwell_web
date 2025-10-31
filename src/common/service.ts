@@ -1,6 +1,6 @@
 export const currencyConstants = ["MDL", "EUR", "USD"] as const;
 
-export const serviceTypesConstants = [
+export const servicesConstants = [
   "Consultatie veterinară",
   "Vaccinare / Profilaxie",
   "Dehelmintizare",
