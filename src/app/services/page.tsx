@@ -1,3 +1,9 @@
+import ServicesList from "@/components/service/ServicesList";
+
 export default function page() {
-  return <div>Services Page</div>;
+  return (
+    <div className="mx-[130px]">
+      <ServicesList />
+    </div>
+  );
 }

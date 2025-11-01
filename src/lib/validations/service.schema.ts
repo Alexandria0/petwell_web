@@ -1,25 +1,5 @@
 import {z} from "zod";
 
-const contactsSchema = z.object({
-  address: z
-    .string()
-    .max(200, "Adresa nu poate depăși 200 de caractere")
-    .optional(),
-  phone: z
-    .string()
-    .min(5, "Numărul de telefon trebuie să aibă cel puțin 5 caractere")
-    .max(20, "Numărul de telefon nu poate depăși 20 de caractere")
-    .regex(/^\+?[\d\s-()]+$/, "Format invalid pentru număr de telefon"),
-  email: z
-    .email()
-    .max(100, "Email-ul nu poate depăși 100 de caractere")
-    .optional(),
-  website: z
-    .url()
-    .max(200, "URL-ul website-ului nu poate depăși 200 de caractere")
-    .optional(),
-});
-
 export const serviceSchema = z.object({
   company: z
     .string()
@@ -43,11 +23,47 @@ export const serviceSchema = z.object({
   prices: z
     .array(
       z.object({
-        name: z.string().min(2).max(100),
-        price: z.string().max(5),
-        currency: z.string().max(5).min(1),
+        name: z
+          .string()
+          .min(2, "Numele serviciului trebuie să aibă cel puțin 2 caractere")
+          .max(100, "Numele serviciului nu poate depăși 100 de caractere"),
+        price: z.string().max(5, "Prețul nu poate depăși 5 caractere"),
+        currency: z
+          .string()
+          .max(5, "Moneda nu poate depăși 5 caractere")
+          .min(1, "Moneda este obligatorie"),
       })
     )
-    .min(1, "Add at least one service.")
-    .max(10, "You can add up to 10 services"),
+    .min(1, "Adăugați cel puțin un serviciu")
+    .max(10, "Puteți adăuga maxim 10 servicii"),
+  contacts: z.object({
+    address: z
+      .string()
+      .max(200, "Adresa nu poate depăși 200 de caractere")
+      .optional(),
+    phone: z
+      .string()
+      .min(5, "Numărul de telefon trebuie să aibă cel puțin 5 caractere")
+      .max(20, "Numărul de telefon nu poate depăși 20 de caractere")
+      .regex(/^\+?[\d\s-()]+$/, "Format invalid pentru număr de telefon"),
+    email: z.string().max(100, "Email-ul nu poate depăși 100 de caractere"),
+    website: z
+      .string()
+      .max(200, "URL-ul website-ului nu poate depăși 200 de caractere")
+      .optional(),
+  }),
+  specialities: z
+    .array(
+      z.object({
+        name: z
+          .string()
+          .min(2, "Numele specializării trebuie să aibă cel puțin 2 caractere")
+          .max(100, "Numele specializării nu poate depăși 100 de caractere"),
+      })
+    )
+    .min(1, "Adăugați cel puțin o specializare")
+    .max(10, "Puteți adăuga maxim 10 specializări"),
+  doctor: z
+    .string()
+    .max(2000, "Descrierea doctorului nu poate depăși 2000 de caractere"),
 });

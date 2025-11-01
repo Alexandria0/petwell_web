@@ -15,3 +15,17 @@ export const servicesConstants = [
   "Cardiologie veterinară",
   "Neurologie veterinară",
 ] as const;
+
+export const animalTypesConstants = [
+  "Câine",
+  "Pisică",
+  "Iepure",
+  "Papagal",
+  "Hamster",
+  "Cal",
+  "Porc",
+  "Porc de Guineea",
+  "Șoarece",
+  "Oaie",
+  "Capră",
+] as const;

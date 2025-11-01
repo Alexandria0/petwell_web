@@ -28,10 +28,11 @@ import {Controller, useFieldArray, useForm} from "react-hook-form";
 import {Input} from "../ui/input";
 import {currencyConstants, servicesConstants} from "@/common/service";
 import z from "zod";
-import {logToastSuccess} from "@/helpers/toast_logger";
+import {logToastSuccess, logToastError} from "@/helpers/toast_logger";
 import {Textarea} from "../ui/textarea";
 import {XIcon} from "lucide-react";
 import {InputGroupAddon, InputGroupButton} from "../ui/input-group";
+import {createService} from "@/lib/services/assistance.service";
 
 export function CreateServiceForm() {
   const form = useForm<z.infer<typeof serviceSchema>>({
@@ -43,33 +44,49 @@ export function CreateServiceForm() {
       animal: "",
       description: "",
       prices: [{name: "", price: "", currency: "MDL"}],
+      contacts: {
+        address: "",
+        phone: "",
+        email: "",
+        website: "",
+      },
+      specialities: [{name: ""}],
+      doctor: "",
     },
   });
 
-  const {fields, append, remove} = useFieldArray({
+  const {
+    fields: priceFields,
+    append: addPrice,
+    remove: removePrice,
+  } = useFieldArray({
     control: form.control,
     name: "prices",
   });
 
-  // const pricesFields = form.watch("prices");
-  // const addPriceField = () => {
-  //   form.setValue("prices", [
-  //     ...pricesFields,
-  //     {name: "", price: "", currency: "MDL"},
-  //   ]);
-  // };
+  const {
+    fields: specialityFields,
+    append: addSpeciality,
+    remove: removeSpeciality,
+  } = useFieldArray({
+    control: form.control,
+    name: "specialities",
+  });
 
-  // const removePriceField = (index: number) => {
-  //   if (pricesFields.length > 1) {
-  //     const newPrices = [...pricesFields];
-  //     newPrices.splice(index, 1);
-  //     form.setValue("prices", newPrices);
-  //   }
-  // };
-
-  function onSubmit(data: z.infer<typeof serviceSchema>) {
-    console.log("Form submitted with data:", data);
-    logToastSuccess(data, "Service form submitted");
+  async function onSubmit(data: z.infer<typeof serviceSchema>) {
+    try {
+      //       export interface ServiceResponse {
+      //   title?: string;
+      //   status?: number;
+      //   errors?: Record<string, string>;
+      //   success: boolean;
+      //   message: string;
+      // }
+      const response = await createService(data);
+      logToastSuccess(response, "");
+    } catch (err: unknown) {
+      logToastError(String(err), "Eroare");
+    }
   }
 
   return (
@@ -93,7 +110,7 @@ export function CreateServiceForm() {
                       {...field}
                       id="form-rhf-service-company"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Numele companiei"
+                      placeholder="S.R.L. INVITRO DIAGNOSTICS"
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -111,7 +128,7 @@ export function CreateServiceForm() {
                       data-invalid={fieldState.invalid}>
                       <FieldContent>
                         <FieldLabel htmlFor="form-rhf-service-type">
-                          Tipul serviciului
+                          Secțiune
                         </FieldLabel>
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
@@ -125,7 +142,7 @@ export function CreateServiceForm() {
                           id="form-rhf-service-type"
                           aria-invalid={fieldState.invalid}
                           className="min-w-[180px]">
-                          <SelectValue placeholder="Alege serviciul" />
+                          <SelectValue placeholder="Alege secțiunea" />
                         </SelectTrigger>
                         <SelectContent position="item-aligned">
                           {servicesConstants.map((service) => (
@@ -165,13 +182,13 @@ export function CreateServiceForm() {
                 render={({field, fieldState}) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="form-rhf-service-location">
-                      Locatia
+                      Locația
                     </FieldLabel>
                     <Input
                       {...field}
                       id="form-rhf-service-location"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Chisinău"
+                      placeholder="Chișinău"
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -184,7 +201,7 @@ export function CreateServiceForm() {
                 control={form.control}
                 render={({field, fieldState}) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-textarea-description">
+                    <FieldLabel htmlFor="form-rhf-service-description">
                       Descriere
                     </FieldLabel>
                     <Textarea
@@ -202,10 +219,9 @@ export function CreateServiceForm() {
               />
             </div>
             <div className="w-1/3 space-y-3">
-              {fields.map((field, index) => (
+              {priceFields.map((field, index) => (
                 <div key={field.id}>
                   <Controller
-                    key={`${field.id}.name`}
                     name={`prices.${index}.name`}
                     control={form.control}
                     render={({field: controllerField, fieldState}) => (
@@ -213,122 +229,254 @@ export function CreateServiceForm() {
                         orientation="vertical"
                         data-invalid={fieldState.invalid}>
                         <FieldLabel
-                          htmlFor={`form-rhf-service-prices.${index}.name`}>
-                          Numele serviciului
+                          htmlFor={`form-rhf-service-prices.${index}.name`}
+                          className="flex justify-between items-center">
+                          #{index + 1} Numele serviciului
+                          {priceFields.length > 1 && (
+                            <InputGroupAddon align="inline-end">
+                              <InputGroupButton
+                                type="button"
+                                variant="destructive"
+                                size="icon-xs"
+                                onClick={() => removePrice(index)}
+                                aria-label={`Remove service ${index + 1}`}>
+                                <XIcon />
+                              </InputGroupButton>
+                            </InputGroupAddon>
+                          )}
                         </FieldLabel>
                         <Input
                           {...controllerField}
                           id={`form-rhf-service-prices.${index}.name`}
                           aria-invalid={fieldState.invalid}
-                          placeholder="..."
+                          placeholder="Consultație generală"
                         />
-                        {fields.length > 1 && (
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <div className="flex flex-row gap-4 mt-2">
+                    <Controller
+                      name={`prices.${index}.price`}
+                      control={form.control}
+                      render={({field: controllerField, fieldState}) => (
+                        <Field
+                          orientation="vertical"
+                          data-invalid={fieldState.invalid}>
+                          <FieldLabel
+                            htmlFor={`form-rhf-service-prices.${index}.price`}>
+                            Prețul
+                          </FieldLabel>
+                          <Input
+                            {...controllerField}
+                            id={`form-rhf-service-prices.${index}.price`}
+                            aria-invalid={fieldState.invalid}
+                            placeholder="0.00"
+                          />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
+                      )}
+                    />
+                    <Controller
+                      name={`prices.${index}.currency`}
+                      control={form.control}
+                      render={({field: controllerField, fieldState}) => (
+                        <Field
+                          orientation="vertical"
+                          data-invalid={fieldState.invalid}>
+                          <FieldContent>
+                            <FieldLabel
+                              htmlFor={`form-rhf-service-prices.${index}.currency`}></FieldLabel>
+                            {fieldState.invalid && (
+                              <FieldError errors={[fieldState.error]} />
+                            )}
+                          </FieldContent>
+                          <Select
+                            name={controllerField.name}
+                            value={controllerField.value}
+                            onValueChange={controllerField.onChange}>
+                            <SelectTrigger
+                              id={`form-rhf-service-prices.${index}.currency`}
+                              aria-invalid={fieldState.invalid}
+                              className="min-w-[120px]">
+                              <SelectValue placeholder="Alege valuta" />
+                            </SelectTrigger>
+                            <SelectContent position="item-aligned">
+                              {currencyConstants.map((currency) => (
+                                <SelectItem key={currency} value={currency}>
+                                  {currency}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </Field>
+                      )}
+                    />
+                  </div>
+                </div>
+              ))}
+              <Button
+                className="w-full"
+                type="button"
+                variant="outline"
+                onClick={() => addPrice({name: "", price: "", currency: "MDL"})}
+                disabled={priceFields.length >= 10}>
+                Adaugă serviciu
+              </Button>
+            </div>
+            <div className="w-1/3 space-y-3">
+              <Controller
+                name="contacts.address"
+                control={form.control}
+                render={({field, fieldState}) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-rhf-service-address">
+                      Adresă
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="form-rhf-service-address"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="str. Exemplu, nr. 10, Chișinău"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="contacts.phone"
+                control={form.control}
+                render={({field, fieldState}) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-rhf-service-phone">
+                      Nr. Telefon
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="form-rhf-service-phone"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="+373 00 00 0000"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="contacts.email"
+                control={form.control}
+                render={({field, fieldState}) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-rhf-service-email">
+                      Email
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="form-rhf-service-email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="email@exemplu.com"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="contacts.website"
+                control={form.control}
+                render={({field, fieldState}) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-rhf-service-website">
+                      Website
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="form-rhf-service-website"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="www.exemplu.com"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              {specialityFields.map((field, index) => (
+                <Controller
+                  key={field.id}
+                  name={`specialities.${index}.name`}
+                  control={form.control}
+                  render={({field: controllerField, fieldState}) => (
+                    <Field
+                      orientation="vertical"
+                      data-invalid={fieldState.invalid}>
+                      <FieldLabel
+                        htmlFor={`form-rhf-service-specialities.${index}.name`}
+                        className="flex justify-between items-center">
+                        Specialitatea #{index + 1}
+                        {specialityFields.length > 1 && (
                           <InputGroupAddon align="inline-end">
                             <InputGroupButton
                               type="button"
-                              variant="ghost"
+                              variant="destructive"
                               size="icon-xs"
-                              onClick={() => remove(index)}
-                              aria-label={`Remove service ${index + 1}`}>
+                              onClick={() => removeSpeciality(index)}
+                              aria-label={`Remove speciality ${index + 1}`}>
                               <XIcon />
                             </InputGroupButton>
                           </InputGroupAddon>
                         )}
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                  <Controller
-                    key={`${field.id}.price`}
-                    name={`prices.${index}.price`}
-                    control={form.control}
-                    render={({field: controllerField, fieldState}) => (
-                      <Field
-                        orientation="vertical"
-                        data-invalid={fieldState.invalid}>
-                        <FieldLabel
-                          htmlFor={`form-rhf-service-prices.${index}.price`}>
-                          Pretul
-                        </FieldLabel>
-                        <Input
-                          {...controllerField}
-                          id={`form-rhf-service-prices.${index}.price`}
-                          aria-invalid={fieldState.invalid}
-                          placeholder="0.00"
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                  <Controller
-                    key={`${field.id}.currency`}
-                    name={`prices.${index}.currency`}
-                    control={form.control}
-                    render={({field: controllerField, fieldState}) => (
-                      // <Field
-                      //   orientation="vertical"
-                      //   data-invalid={fieldState.invalid}>
-                      //   <FieldLabel
-                      //     htmlFor={`form-rhf-service-prices.${index}.currency`}>
-                      //     Pretul
-                      //   </FieldLabel>
-                      //   <Input
-                      //     {...controllerField}
-                      //     id={`form-rhf-service-prices.${index}.currency`}
-                      //     aria-invalid={fieldState.invalid}
-                      //     placeholder="MDL"
-                      //   />
-                      //   {fieldState.invalid && (
-                      //     <FieldError errors={[fieldState.error]} />
-                      //   )}
-                      // </Field>
-                      <Field
-                        orientation="vertical"
-                        data-invalid={fieldState.invalid}>
-                        <FieldContent>
-                          <FieldLabel
-                            htmlFor={`form-rhf-service-prices.${index}.currency`}>
-                            Valuta
-                          </FieldLabel>
-                          {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]} />
-                          )}
-                        </FieldContent>
-                        <Select
-                          name={controllerField.name}
-                          value={controllerField.value}
-                          onValueChange={controllerField.onChange}>
-                          <SelectTrigger
-                            id={`form-rhf-service-prices.${index}.currency`}
-                            aria-invalid={fieldState.invalid}
-                            className="min-w-[120px]">
-                            <SelectValue placeholder="Alege valuta" />
-                          </SelectTrigger>
-                          <SelectContent position="item-aligned">
-                            {currencyConstants.map((currency) => (
-                              <SelectItem key={currency} value={currency}>
-                                {currency}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                    )}
-                  />
-                </div>
+                      </FieldLabel>
+                      <Input
+                        {...controllerField}
+                        id={`form-rhf-service-specialities.${index}.name`}
+                        aria-invalid={fieldState.invalid}
+                        placeholder="Consultanță nutrițională"
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
               ))}
               <Button
+                className="w-full"
                 type="button"
                 variant="outline"
-                size="sm"
-                onClick={() => append({name: "", price: "", currency: "MDL"})}
-                disabled={fields.length >= 10}>
-                Add service
+                onClick={() => addSpeciality({name: ""})}
+                disabled={specialityFields.length >= 10}>
+                Adaugă specialitate
               </Button>
+              <Controller
+                name="doctor"
+                control={form.control}
+                render={({field, fieldState}) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-rhf-service-doctor">
+                      Descrierea doctorului
+                    </FieldLabel>
+                    <Textarea
+                      {...field}
+                      id="form-rhf-service-doctor"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="..."
+                      className="min-h-[120px] max-h-[400px]"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
             </div>
           </FieldGroup>
         </form>
