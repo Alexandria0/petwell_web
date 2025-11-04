@@ -12,7 +12,7 @@ import {
 import {useAuth} from "@/context/AuthContext";
 import {Avatar, AvatarFallback} from "../ui/avatar";
 import {useRouter} from "next/navigation";
-import {LogOut, UserPen, ClipboardPlus, MonitorCog} from "lucide-react";
+import {LogOut, UserPen, ClipboardPlus, MonitorCog, Server} from "lucide-react";
 
 export function Profile() {
   const {user, logout} = useAuth();
@@ -44,15 +44,24 @@ export function Profile() {
             </DropdownMenuShortcut>
           </DropdownMenuItem>
           {user?.role === "Business" && (
-            <DropdownMenuItem onClick={() => router.push("/create-service")}>
-              Publică serviciu
-              <DropdownMenuShortcut>
-                <ClipboardPlus />
-              </DropdownMenuShortcut>
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push("/create-service")}>
+                Publică serviciu
+                <DropdownMenuShortcut>
+                  <ClipboardPlus />
+                </DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/my-services")}>
+                Serviciile mele
+                <DropdownMenuShortcut>
+                  <Server />
+                </DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
           )}
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
         <DropdownMenuItem>
           Support
           <DropdownMenuShortcut>

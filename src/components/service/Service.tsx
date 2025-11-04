@@ -2,13 +2,24 @@ import {Card, CardContent, CardFooter, CardHeader} from "../ui/card";
 import {Button} from "../ui/button";
 import {Syringe, MapPin, PawPrint} from "lucide-react";
 import {IService} from "@/lib/interfaces/IService";
+import Link from "next/link";
+import {deleteService} from "@/lib/services/services.service";
+import {useState} from "react";
+import {toast} from "sonner";
 
 interface ServiceProps {
   service: IService;
+  onMyServicesPage?: boolean;
+  onDelete?: (serviceId: string) => void;
 }
 
-export default function Service({service}: ServiceProps) {
-  const {company, type, location, animal, description} = service;
+export default function Service({
+  service,
+  onMyServicesPage = false,
+  onDelete,
+}: ServiceProps) {
+  const {id, company, type, location, animal, description} = service;
+  const [isDeleting, setIsDeleting] = useState(false);
 
   return (
     <Card>
@@ -30,10 +41,31 @@ export default function Service({service}: ServiceProps) {
         </div>
       </CardHeader>
       <CardContent>{description}</CardContent>
-      <CardFooter>
-        <Button type="button" variant="outline">
-          Citește mai mult
-        </Button>
+      <CardFooter className="space-x-4">
+        <Link href={`/services/${id}`}>
+          <Button type="button" variant="outline">
+            Citește mai mult
+          </Button>
+        </Link>
+        {onMyServicesPage && (
+          <Button
+            type="button"
+            variant="destructive"
+            disabled={isDeleting}
+            onClick={async () => {
+              setIsDeleting(true);
+              const result = await deleteService(id);
+              if (result.success) {
+                toast.success("Serviciul a fost șters cu succes");
+                onDelete?.(id);
+              } else {
+                toast.error(result.error || "Nu s-a putut șterge serviciul");
+                setIsDeleting(false);
+              }
+            }}>
+            {isDeleting ? "Se șterge..." : "Șterge serviciul"}
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

@@ -20,12 +20,23 @@ export const animalTypesConstants = [
   "Câine",
   "Pisică",
   "Iepure",
-  "Papagal",
-  "Hamster",
   "Cal",
   "Porc",
-  "Porc de Guineea",
-  "Șoarece",
-  "Oaie",
   "Capră",
+  "Oaie",
+  "Vacă",
+] as const;
+
+export const locationList = [
+  "Chișinău",
+  "Bălți",
+  "Cahul",
+  "Tighina",
+  "Tiraspol",
+  "Bender",
+  "Ribnita",
+  "Ungheni",
+  "Soroca",
+  "Orhei",
+  "Comrat",
 ] as const;

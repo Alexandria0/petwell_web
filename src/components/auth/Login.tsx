@@ -118,7 +118,7 @@ export function Login() {
       <CardFooter className="flex-col gap-2">
         <p>
           Nu ai încă un cont?{" "}
-          <Link href="/signup" className="text-green-400 hover:underline">
+          <Link href="/sign-up" className="text-green-400 hover:underline">
             Înregistrează-te
           </Link>
         </p>

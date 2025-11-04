@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  animalTypesConstants,
+  locationList,
+  servicesConstants,
+} from "@/common/service";
 import {Button} from "@/components/ui/button";
 import {
   Card,
@@ -32,33 +37,6 @@ const searchFormSchema = z.object({
   animalType: z.string().min(1, "Vă rugăm să selectați un animal"),
   location: z.string().min(1, "Vă rugăm să selectați o locație"),
 });
-
-const serviceTypeList = [
-  {label: "Vaccinare", value: "Vaccinare"},
-  {label: "Controale veterinare", value: "Controale veterinare"},
-  {label: "Hrănire asistată", value: "Hrănire asistată"},
-  {label: "Sfaturi și bune practici", value: "Sfaturi și bune practici"},
-  {label: "Consultanță", value: "Consultanță"},
-  {label: "Îngrijire paliativă", value: "Îngrijire paliativă"},
-  {label: "Chirurgie", value: "Chirurgie"},
-] as const;
-
-const animalTypeList = [
-  {label: "Câine", value: "Câine"},
-  {label: "Pisică", value: "Pisică"},
-  {label: "Pasăre", value: "Pasăre"},
-  {label: "Pește", value: "Pește"},
-  {label: "Hamster", value: "Hamster"},
-  {label: "Iepure", value: "Iepure"},
-] as const;
-
-const locationList = [
-  {label: "București", value: "București"},
-  {label: "Cluj-Napoca", value: "Cluj-Napoca"},
-  {label: "Iași", value: "Iași"},
-  {label: "Timișoara", value: "Timișoara"},
-  {label: "Constanța", value: "Constanța"},
-] as const;
 
 export function MainSearchBox() {
   const form = useForm<z.infer<typeof searchFormSchema>>({
@@ -106,9 +84,9 @@ export function MainSearchBox() {
                       <SelectValue placeholder="Alege serviciul" />
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
-                      {serviceTypeList.map((service) => (
-                        <SelectItem key={service.value} value={service.value}>
-                          {service.label}
+                      {servicesConstants.map((service) => (
+                        <SelectItem key={service} value={service}>
+                          {service}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -140,9 +118,9 @@ export function MainSearchBox() {
                       <SelectValue placeholder="Alege animalul" />
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
-                      {animalTypeList.map((animal) => (
-                        <SelectItem key={animal.value} value={animal.value}>
-                          {animal.label}
+                      {animalTypesConstants.map((animal) => (
+                        <SelectItem key={animal} value={animal}>
+                          {animal}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -175,8 +153,8 @@ export function MainSearchBox() {
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
                       {locationList.map((location) => (
-                        <SelectItem key={location.value} value={location.value}>
-                          {location.label}
+                        <SelectItem key={location} value={location}>
+                          {location}
                         </SelectItem>
                       ))}
                     </SelectContent>

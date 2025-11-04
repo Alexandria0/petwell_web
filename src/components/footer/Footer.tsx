@@ -6,7 +6,7 @@ import {ABOUT_US, NAV_LINKS} from "@/common/constants";
 
 export default function Footer() {
   return (
-    <footer className="flex justify-between px-32 py-12 border-t-2">
+    <footer className="flex justify-between px-32 py-12 border-t-2 mt-10">
       <div className="flex-1">
         <ul className="flex flex-col gap-3">
           <h2 className="uppercase mb-3">Navigare</h2>

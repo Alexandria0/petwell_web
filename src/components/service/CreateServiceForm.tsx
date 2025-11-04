@@ -26,15 +26,22 @@ import {serviceSchema} from "@/lib/validations/service.schema";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Controller, useFieldArray, useForm} from "react-hook-form";
 import {Input} from "../ui/input";
-import {currencyConstants, servicesConstants} from "@/common/service";
+import {
+  animalTypesConstants,
+  currencyConstants,
+  locationList,
+  servicesConstants,
+} from "@/common/service";
 import z from "zod";
 import {logToastSuccess, logToastError} from "@/helpers/toast_logger";
 import {Textarea} from "../ui/textarea";
 import {XIcon} from "lucide-react";
 import {InputGroupAddon, InputGroupButton} from "../ui/input-group";
 import {createService} from "@/lib/services/assistance.service";
+import {useRouter} from "next/navigation";
 
 export function CreateServiceForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof serviceSchema>>({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
@@ -75,15 +82,17 @@ export function CreateServiceForm() {
 
   async function onSubmit(data: z.infer<typeof serviceSchema>) {
     try {
-      //       export interface ServiceResponse {
-      //   title?: string;
-      //   status?: number;
-      //   errors?: Record<string, string>;
-      //   success: boolean;
-      //   message: string;
-      // }
       const response = await createService(data);
       logToastSuccess(response, "");
+      if (
+        typeof response === "object" &&
+        response !== null &&
+        "success" in response &&
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (response as any)["success"]
+      ) {
+        router.push("/my-services");
+      }
     } catch (err: unknown) {
       logToastError(String(err), "Eroare");
     }
@@ -159,19 +168,35 @@ export function CreateServiceForm() {
                   name="animal"
                   control={form.control}
                   render={({field, fieldState}) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="form-rhf-service-animal">
-                        Animalul
-                      </FieldLabel>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                      <Input
-                        {...field}
-                        id="form-rhf-service-animal"
-                        aria-invalid={fieldState.invalid}
-                        placeholder="Pisică, Câine, etc."
-                      />
+                    <Field
+                      orientation="vertical"
+                      data-invalid={fieldState.invalid}>
+                      <FieldContent>
+                        <FieldLabel htmlFor="form-rhf-service-animal">
+                          Tipul animalului
+                        </FieldLabel>
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </FieldContent>
+                      <Select
+                        name={field.name}
+                        value={field.value}
+                        onValueChange={field.onChange}>
+                        <SelectTrigger
+                          id="form-rhf-service-animal"
+                          aria-invalid={fieldState.invalid}
+                          className="min-w-[120px]">
+                          <SelectValue placeholder="Alege animalul" />
+                        </SelectTrigger>
+                        <SelectContent position="item-aligned">
+                          {animalTypesConstants.map((animal) => (
+                            <SelectItem key={animal} value={animal}>
+                              {animal}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </Field>
                   )}
                 />
@@ -180,19 +205,35 @@ export function CreateServiceForm() {
                 name="location"
                 control={form.control}
                 render={({field, fieldState}) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="form-rhf-service-location">
-                      Locația
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      id="form-rhf-service-location"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Chișinău"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
+                  <Field
+                    orientation="vertical"
+                    data-invalid={fieldState.invalid}>
+                    <FieldContent>
+                      <FieldLabel htmlFor="form-rhf-service-location">
+                        Locația
+                      </FieldLabel>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </FieldContent>
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={field.onChange}>
+                      <SelectTrigger
+                        id="form-rhf-service-location"
+                        aria-invalid={fieldState.invalid}
+                        className="min-w-[120px]">
+                        <SelectValue placeholder="Alege locația" />
+                      </SelectTrigger>
+                      <SelectContent position="item-aligned">
+                        {locationList.map((location) => (
+                          <SelectItem key={location} value={location}>
+                            {location}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </Field>
                 )}
               />
