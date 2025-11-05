@@ -1,18 +1,26 @@
 "use client";
 import {useEffect, useState} from "react";
 import Service from "./Service";
-import {getServices} from "@/lib/services/services.service";
+import {getServices, getMyServices} from "@/lib/api/services.service";
 import {IService} from "@/lib/interfaces/IService";
 import {Spinner} from "../ui/spinner";
 
-export default function ServicesList() {
+interface ServicesListProps {
+  showMyServices?: boolean;
+}
+
+export default function ServicesList({
+  showMyServices = false,
+}: ServicesListProps) {
   const [services, setServices] = useState<IService[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadServices = async () => {
-      const {data, error} = await getServices();
+      const {data, error} = showMyServices
+        ? await getMyServices()
+        : await getServices();
       if (error) {
         setError(error);
       } else {
@@ -22,7 +30,11 @@ export default function ServicesList() {
     };
 
     loadServices();
-  }, []);
+  }, [showMyServices]);
+
+  const handleDelete = (serviceId: string) => {
+    setServices(services.filter((service) => service.id !== serviceId));
+  };
 
   if (loading) {
     return (
@@ -36,10 +48,12 @@ export default function ServicesList() {
     return <div className="text-center text-red-500 p-4">{error}</div>;
   }
 
-  if (services.length === 0) {
+  if (services?.length === 0 || services == null) {
     return (
       <div className="text-center text-muted-foreground p-4">
-        Nu există servicii disponibile momentan.
+        {showMyServices
+          ? "Nu ai publicat niciun serviciu."
+          : "Nu există servicii disponibile momentan."}
       </div>
     );
   }
@@ -47,7 +61,12 @@ export default function ServicesList() {
   return (
     <div className="space-y-6">
       {services.map((service) => (
-        <Service key={service.id} service={service} />
+        <Service
+          key={service.id}
+          service={service}
+          onMyServicesPage={showMyServices}
+          onDelete={showMyServices ? handleDelete : undefined}
+        />
       ))}
     </div>
   );

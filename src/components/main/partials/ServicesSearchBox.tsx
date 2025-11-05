@@ -4,7 +4,7 @@ import {
   animalTypesConstants,
   locationList,
   servicesConstants,
-} from "@/common/service";
+} from "@/common/kservice";
 import {Button} from "@/components/ui/button";
 import {
   Card,
@@ -28,27 +28,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {logToastSuccess} from "@/helpers/toast_logger";
+import {searchSchema} from "@/lib/validations/search.schema";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Controller, useForm} from "react-hook-form";
 import z from "zod";
 
-const searchFormSchema = z.object({
-  serviceType: z.string().min(1, "Vă rugăm să selectați un serviciu"),
-  animalType: z.string().min(1, "Vă rugăm să selectați un animal"),
-  location: z.string().min(1, "Vă rugăm să selectați o locație"),
-});
-
-export function MainSearchBox() {
-  const form = useForm<z.infer<typeof searchFormSchema>>({
-    resolver: zodResolver(searchFormSchema),
+export function ServicesSearchBox() {
+  const form = useForm<z.infer<typeof searchSchema>>({
+    resolver: zodResolver(searchSchema),
     defaultValues: {
-      serviceType: "",
-      animalType: "",
+      service: "",
+      animal: "",
       location: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof searchFormSchema>) {
+  function onSubmit(data: z.infer<typeof searchSchema>) {
     logToastSuccess(data, "Search form submitted");
   }
 
@@ -61,12 +56,12 @@ export function MainSearchBox() {
         <form onSubmit={form.handleSubmit(onSubmit)} id="form-rhf-select">
           <FieldGroup className="flex flex-row gap-4">
             <Controller
-              name="serviceType"
+              name="service"
               control={form.control}
               render={({field, fieldState}) => (
                 <Field orientation="vertical" data-invalid={fieldState.invalid}>
                   <FieldContent>
-                    <FieldLabel htmlFor="form-rhf-select-serviceType">
+                    <FieldLabel htmlFor="form-rhf-select-service">
                       Tipul serviciului
                     </FieldLabel>
                     {fieldState.invalid && (
@@ -78,7 +73,7 @@ export function MainSearchBox() {
                     value={field.value}
                     onValueChange={field.onChange}>
                     <SelectTrigger
-                      id="form-rhf-select-serviceType"
+                      id="form-rhf-select-service"
                       aria-invalid={fieldState.invalid}
                       className="min-w-[120px]">
                       <SelectValue placeholder="Alege serviciul" />
@@ -95,13 +90,13 @@ export function MainSearchBox() {
               )}
             />
             <Controller
-              name="animalType"
+              name="animal"
               control={form.control}
               render={({field, fieldState}) => (
                 <Field orientation="vertical" data-invalid={fieldState.invalid}>
                   <FieldContent>
-                    <FieldLabel htmlFor="form-rhf-select-animalType">
-                      Tipul serviciului
+                    <FieldLabel htmlFor="form-rhf-select-animal">
+                      Tipul animalului
                     </FieldLabel>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -112,7 +107,7 @@ export function MainSearchBox() {
                     value={field.value}
                     onValueChange={field.onChange}>
                     <SelectTrigger
-                      id="form-rhf-select-animalType"
+                      id="form-rhf-select-animal"
                       aria-invalid={fieldState.invalid}
                       className="min-w-[120px]">
                       <SelectValue placeholder="Alege animalul" />

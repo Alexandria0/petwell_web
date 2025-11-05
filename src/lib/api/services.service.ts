@@ -7,7 +7,7 @@ export async function getServices(): Promise<{
   error?: string;
 }> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/Services/get-services`, {
+    const response = await fetch(`${API_BASE_URL}/api/services/get-services`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export async function getMyServices(): Promise<{
   error?: string;
 }> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/Services/my-services`, {
+    const response = await fetch(`${API_BASE_URL}/api/services/my-services`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +63,7 @@ export async function getServiceById(
 ): Promise<{data: IService | null; error?: string}> {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/api/Services/get-service/${id}`,
+      `${API_BASE_URL}/api/services/get-service/${id}`,
       {
         method: "GET",
         headers: {
@@ -93,7 +93,7 @@ export async function deleteService(
 ): Promise<{success: boolean; message?: string; error?: string}> {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/api/Services/remove-service/${id}`,
+      `${API_BASE_URL}/api/services/delete-service/${id}`,
       {
         method: "DELETE",
         headers: {

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import {Card, CardContent, CardHeader} from "../ui/card";
 import {CarouselServices} from "./partials/CarouselServices";
-import {MainSearchBox} from "./partials/MainSearchBox";
+import {ServicesSearchBox} from "./partials/ServicesSearchBox";
 
 export default function MainContent() {
   return (
@@ -14,7 +14,7 @@ export default function MainContent() {
           height={1000}
           className="object-cover w-full h-[600px] rounded-4xl"
         />
-        <MainSearchBox />
+        <ServicesSearchBox />
       </div>
       <div className="w-full flex justify-between my-10 gap-8 select-none">
         <Card className="w-[30%] py-10">

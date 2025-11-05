@@ -3,7 +3,7 @@ import {Button} from "../ui/button";
 import {Syringe, MapPin, PawPrint} from "lucide-react";
 import {IService} from "@/lib/interfaces/IService";
 import Link from "next/link";
-import {deleteService} from "@/lib/services/services.service";
+import {deleteService} from "@/lib/api/services.service";
 import {useState} from "react";
 import {toast} from "sonner";
 

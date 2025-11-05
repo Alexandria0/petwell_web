@@ -24,7 +24,7 @@ import {
 import {Input} from "@/components/ui/input";
 import Link from "next/link";
 import {useState} from "react";
-import {signup} from "@/lib/services/auth.service";
+import {signup} from "@/lib/api/auth.service";
 import {useAuth} from "@/context/AuthContext";
 import {logToastError, logToastSuccess} from "@/helpers/toast_logger";
 

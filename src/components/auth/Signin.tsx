@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/card";
 import {Input} from "@/components/ui/input";
 import Link from "next/link";
-import {signin} from "@/lib/services/auth.service";
+import {signin} from "@/lib/api/auth.service";
 import {useAuth} from "@/context/AuthContext";
 import {logToastError, logToastSuccess} from "@/helpers/toast_logger";
 
@@ -37,7 +37,7 @@ const FormSchema = z.object({
   }),
 });
 
-export function Login() {
+export function Signin() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

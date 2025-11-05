@@ -31,13 +31,13 @@ import {
   currencyConstants,
   locationList,
   servicesConstants,
-} from "@/common/service";
+} from "@/common/kservice";
 import z from "zod";
 import {logToastSuccess, logToastError} from "@/helpers/toast_logger";
 import {Textarea} from "../ui/textarea";
 import {XIcon} from "lucide-react";
 import {InputGroupAddon, InputGroupButton} from "../ui/input-group";
-import {createService} from "@/lib/services/assistance.service";
+import {createService} from "@/lib/api/assistance.service";
 import {useRouter} from "next/navigation";
 
 export function CreateServiceForm() {

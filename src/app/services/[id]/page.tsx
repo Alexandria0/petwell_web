@@ -1,7 +1,7 @@
 "use client";
 import {useEffect, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
-import {getServiceById} from "@/lib/services/services.service";
+import {getServiceById} from "@/lib/api/services.service";
 import {IService} from "@/lib/interfaces/IService";
 import ServiceDetail from "@/components/service/ServiceDetail";
 import {Spinner} from "@/components/ui/spinner";
@@ -35,7 +35,7 @@ export default function ServicePage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen mx-[130px]">
+      <div className="flex justify-center items-center min-h-screen px-4">
         <Spinner className="h-12 w-12" />
       </div>
     );
@@ -43,9 +43,9 @@ export default function ServicePage() {
 
   if (error || !service) {
     return (
-      <div className="container py-8 mx-[130px]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8">
         <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold text-red-500">
+          <h1 className="text-xl sm:text-2xl font-bold text-red-500">
             {error || "Serviciul nu a fost găsit"}
           </h1>
           <Button onClick={() => router.back()} variant="outline">
@@ -59,7 +59,7 @@ export default function ServicePage() {
 
   return (
     <div>
-      <div className="container mx-[50px]">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <Button onClick={() => router.back()} variant="ghost" className="mb-4">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Înapoi la servicii

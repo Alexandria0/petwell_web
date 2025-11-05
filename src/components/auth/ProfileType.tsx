@@ -5,7 +5,7 @@ import {Button} from "../ui/button";
 import {useState} from "react";
 import ProfileTypeBtnSelector from "./ProfileTypeBtnSelector";
 import {TYPES_OF_PROFILES} from "@/common/constants";
-import {chooseProfile} from "@/lib/services/auth.service";
+import {chooseProfile} from "@/lib/api/auth.service";
 import {logToastError, logToastSuccess} from "@/helpers/toast_logger";
 import {useAuth} from "@/context/AuthContext";
 
