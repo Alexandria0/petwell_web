@@ -27,10 +27,10 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Controller, useFieldArray, useForm} from "react-hook-form";
 import {Input} from "../ui/input";
 import {
-  animalTypesConstants,
-  currencyConstants,
-  locationList,
   servicesConstants,
+  animalsConstants,
+  locationsConstants,
+  currencyConstants,
 } from "@/common/kservice";
 import z from "zod";
 import {logToastSuccess, logToastError} from "@/helpers/toast_logger";
@@ -190,7 +190,7 @@ export function CreateServiceForm() {
                           <SelectValue placeholder="Alege animalul" />
                         </SelectTrigger>
                         <SelectContent position="item-aligned">
-                          {animalTypesConstants.map((animal) => (
+                          {animalsConstants.map((animal) => (
                             <SelectItem key={animal} value={animal}>
                               {animal}
                             </SelectItem>
@@ -227,7 +227,7 @@ export function CreateServiceForm() {
                         <SelectValue placeholder="Alege locația" />
                       </SelectTrigger>
                       <SelectContent position="item-aligned">
-                        {locationList.map((location) => (
+                        {locationsConstants.map((location) => (
                           <SelectItem key={location} value={location}>
                             {location}
                           </SelectItem>

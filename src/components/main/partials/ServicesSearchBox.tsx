@@ -1,9 +1,9 @@
 "use client";
 
 import {
-  animalTypesConstants,
-  locationList,
   servicesConstants,
+  animalsConstants,
+  locationsConstants,
 } from "@/common/kservice";
 import {Button} from "@/components/ui/button";
 import {
@@ -113,7 +113,7 @@ export function ServicesSearchBox() {
                       <SelectValue placeholder="Alege animalul" />
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
-                      {animalTypesConstants.map((animal) => (
+                      {animalsConstants.map((animal) => (
                         <SelectItem key={animal} value={animal}>
                           {animal}
                         </SelectItem>
@@ -147,7 +147,7 @@ export function ServicesSearchBox() {
                       <SelectValue placeholder="Alege locația" />
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
-                      {locationList.map((location) => (
+                      {locationsConstants.map((location) => (
                         <SelectItem key={location} value={location}>
                           {location}
                         </SelectItem>

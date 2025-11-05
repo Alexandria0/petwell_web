@@ -16,7 +16,7 @@ export const servicesConstants = [
   "Neurologie veterinară",
 ] as const;
 
-export const animalTypesConstants = [
+export const animalsConstants = [
   "Câine",
   "Pisică",
   "Iepure",
@@ -27,7 +27,7 @@ export const animalTypesConstants = [
   "Vacă",
 ] as const;
 
-export const locationList = [
+export const locationsConstants = [
   "Chișinău",
   "Bălți",
   "Cahul",
