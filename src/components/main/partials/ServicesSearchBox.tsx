@@ -27,24 +27,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {logToastSuccess} from "@/helpers/toast_logger";
 import {searchSchema} from "@/lib/validations/search.schema";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Controller, useForm} from "react-hook-form";
 import z from "zod";
+import {useRouter} from "next/navigation";
 
 export function ServicesSearchBox() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof searchSchema>>({
     resolver: zodResolver(searchSchema),
     defaultValues: {
-      service: "",
+      type: "",
       animal: "",
       location: "",
     },
   });
 
   function onSubmit(data: z.infer<typeof searchSchema>) {
-    logToastSuccess(data, "Search form submitted");
+    const params = new URLSearchParams();
+    if (data.type) params.set("type", data.type);
+    if (data.animal) params.set("animal", data.animal);
+    if (data.location) params.set("location", data.location);
+
+    router.push(`/services?${params.toString()}`);
   }
 
   return (
@@ -56,12 +62,12 @@ export function ServicesSearchBox() {
         <form onSubmit={form.handleSubmit(onSubmit)} id="form-rhf-select">
           <FieldGroup className="flex flex-row gap-4">
             <Controller
-              name="service"
+              name="type"
               control={form.control}
               render={({field, fieldState}) => (
                 <Field orientation="vertical" data-invalid={fieldState.invalid}>
                   <FieldContent>
-                    <FieldLabel htmlFor="form-rhf-select-service">
+                    <FieldLabel htmlFor="form-rhf-select-type">
                       Tipul serviciului
                     </FieldLabel>
                     {fieldState.invalid && (
@@ -73,7 +79,7 @@ export function ServicesSearchBox() {
                     value={field.value}
                     onValueChange={field.onChange}>
                     <SelectTrigger
-                      id="form-rhf-select-service"
+                      id="form-rhf-select-type"
                       aria-invalid={fieldState.invalid}
                       className="min-w-[120px]">
                       <SelectValue placeholder="Alege serviciul" />
