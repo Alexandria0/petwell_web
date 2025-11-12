@@ -14,7 +14,7 @@ export default function MainContent() {
           height={1000}
           className="object-cover w-full h-[600px] rounded-4xl"
         />
-        <ServicesSearchBox />
+        <ServicesSearchBox className="absolute left-1/2 bottom-40 transform -translate-x-1/2 translate-y-1/2 w-[80%]" />
       </div>
       <div className="w-full flex justify-between my-10 gap-8 select-none">
         <Card className="w-[30%] py-10">

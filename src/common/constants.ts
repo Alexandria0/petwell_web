@@ -4,6 +4,7 @@ import {
   TickGreenOutlineIcon,
   UserGreenOutlineIcon,
 } from "@/components/icons";
+import {Heart, Shield, LucidePersonStanding, Badge} from "lucide-react";
 
 export const APP_NAME = "PetWell";
 
@@ -67,7 +68,7 @@ export const TYPES_OF_PROFILES = [
   },
 ];
 
-export const ABOUT_US = {
+export const CONTACT_US = {
   title: "Contactează-ne",
   info: {
     header: "Unde ne găsești",
@@ -81,6 +82,38 @@ export const ABOUT_US = {
     "Duminică: Închis",
   ],
   map_img: "/assets/images/map.jpg",
+};
+
+export const ABOUT_US = {
+  t1: "Despre cum a început totul?",
+  p1: "AnimalCare s-a născut din dorința de a simplifica procesul de găsire a serviciilor veterinare și de îngrijire pentru animalele de companie. Am observat că mulți proprietari de animale întâmpină dificultăți în găsirea profesioniștilor potriviți. Astfel, am creat o platformă care să conecteze rapid și eficient proprietarii de animale cu cei mai buni profesioniști din zona lor, oferind transparență în servicii, prețuri și disponibilitate. Astăzi, AnimalCare este partenerul de încredere pentru mii de proprietari de animale din România, facilitând accesul la servicii de calitate pentru prietenii lor blănoși.",
+  t2: "Valorile noastre",
+  p2: [
+    {
+      icon: Heart,
+      title: "Dragoste pentru animale",
+      description:
+        "Fiecare animal merită cea mai bună îngrijire și atenție din partea profesioniștilor dedicați.",
+    },
+    {
+      icon: Shield,
+      title: "Siguranță și încredere",
+      description:
+        "Verificăm cu atenție toți partenerii noștri pentru a vă asigura servicii de cea mai înaltă calitate.",
+    },
+    {
+      icon: LucidePersonStanding,
+      title: "Comunitate unită",
+      description:
+        "Conectăm iubitorii de animale cu profesioniști de încredere într-o comunitate solidară.",
+    },
+    {
+      icon: Badge,
+      title: "Excelență în servicii",
+      description:
+        "Ne străduim să oferim doar cele mai bune servicii pentru prietenii dumneavoastră blănoși.",
+    },
+  ],
 };
 
 export const CAROUSEL_CONTENT = [

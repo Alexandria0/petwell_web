@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import {Input} from "../ui/input";
 import {Button} from "../ui/button";
-import {ABOUT_US, NAV_LINKS} from "@/common/constants";
+import {CONTACT_US, NAV_LINKS} from "@/common/constants";
 
 export default function Footer() {
   return (
@@ -23,15 +23,15 @@ export default function Footer() {
         <h2 className="uppercase mb-3">Contact</h2>
         <h3 className="">Telefon</h3>
         <Link
-          href={`tel:${ABOUT_US.info.phone}`}
+          href={`tel:${CONTACT_US.info.phone}`}
           className="text-[#878787] hover:underline">
-          {ABOUT_US.info.phone}
+          {CONTACT_US.info.phone}
         </Link>
         <h3 className="">Email</h3>
         <Link
-          href={`mailto:${ABOUT_US.info.email}`}
+          href={`mailto:${CONTACT_US.info.email}`}
           className="text-[#878787] hover:underline">
-          {ABOUT_US.info.email}
+          {CONTACT_US.info.email}
         </Link>
       </div>
       <div className="flex-2">

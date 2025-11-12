@@ -1,3 +1,4 @@
+import {ServicesSearchBox} from "@/components/main/partials/ServicesSearchBox";
 import ServicesList from "@/components/service/ServicesList";
 
 interface ServicesPageProps {
@@ -29,6 +30,7 @@ export default async function page({searchParams}: ServicesPageProps) {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+      <ServicesSearchBox className={"my-8"} />
       <ServicesList searchParams={params} />
     </div>
   );
