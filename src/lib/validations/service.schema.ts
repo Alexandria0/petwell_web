@@ -27,7 +27,10 @@ export const serviceSchema = z.object({
           .string()
           .min(2, "Numele serviciului trebuie să aibă cel puțin 2 caractere")
           .max(100, "Numele serviciului nu poate depăși 100 de caractere"),
-        price: z.string().max(5, "Prețul nu poate depăși 5 caractere"),
+        price: z
+          .string()
+          .max(5, "Prețul nu poate depăși 5 caractere")
+          .regex(/^\d+(\.\d{1,2})?$/, "Prețul trebuie să fie un număr"),
         currency: z
           .string()
           .max(5, "Moneda nu poate depăși 5 caractere")
@@ -46,7 +49,10 @@ export const serviceSchema = z.object({
       .min(5, "Numărul de telefon trebuie să aibă cel puțin 5 caractere")
       .max(20, "Numărul de telefon nu poate depăși 20 de caractere")
       .regex(/^\+?[\d\s-()]+$/, "Format invalid pentru număr de telefon"),
-    email: z.string().max(100, "Email-ul nu poate depăși 100 de caractere"),
+    email: z
+      .email("Adresă de email invalidă")
+      .max(100, "Email-ul nu poate depăși 100 de caractere")
+      .or(z.literal("")),
     website: z
       .string()
       .max(200, "URL-ul website-ului nu poate depăși 200 de caractere")

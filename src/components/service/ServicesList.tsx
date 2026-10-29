@@ -33,7 +33,10 @@ export default function ServicesList({
       searchParams.searchTerm);
 
   useEffect(() => {
+    let cancelled = false;
     const loadServices = async () => {
+      setLoading(true);
+      setError(null);
       const params = {
         page: searchParams?.page,
         pageSize: searchParams?.pageSize,
@@ -50,6 +53,7 @@ export default function ServicesList({
         result = await getServices(params);
       }
 
+      if (cancelled) return; // a newer search started; drop this response
       if (result.error) {
         setError(result.error);
       } else {
@@ -59,6 +63,9 @@ export default function ServicesList({
     };
 
     loadServices();
+    return () => {
+      cancelled = true;
+    };
   }, [showMyServices, searchParams]);
 
   const handleDelete = (serviceId: string) => {

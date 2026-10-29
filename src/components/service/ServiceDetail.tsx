@@ -125,7 +125,11 @@ export default function ServiceDetail({service}: ServiceDetailProps) {
                   <div className="min-w-0">
                     <p className="text-sm text-muted-foreground">Website</p>
                     <a
-                      href={contacts.website}
+                      href={
+                        /^https?:\/\//i.test(contacts.website)
+                          ? contacts.website
+                          : `https://${contacts.website}`
+                      }
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-medium hover:underline text-sm sm:text-base break-all">

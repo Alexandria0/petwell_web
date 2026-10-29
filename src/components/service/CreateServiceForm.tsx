@@ -83,15 +83,11 @@ export function CreateServiceForm() {
   async function onSubmit(data: z.infer<typeof serviceSchema>) {
     try {
       const response = await createService(data);
-      logToastSuccess(response, "");
-      if (
-        typeof response === "object" &&
-        response !== null &&
-        "success" in response &&
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (response as any)["success"]
-      ) {
+      if ((response as {success?: boolean} | null)?.success) {
+        logToastSuccess(response, "Serviciul a fost creat");
         router.push("/my-services");
+      } else {
+        logToastError(response, "Eroare la crearea serviciului");
       }
     } catch (err: unknown) {
       logToastError(String(err), "Eroare");

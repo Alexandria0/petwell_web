@@ -44,6 +44,7 @@ const FormSchema = z
       .regex(/^[0-9+]+$/, {
         message: "Please enter a valid phone number.",
       })
+      .or(z.literal(""))
       .optional(),
     password: z.string().min(8, {
       message: "Password must be at least 8 characters.",
@@ -61,6 +62,7 @@ export function Signup() {
     defaultValues: {
       name: "",
       email: "",
+      phone: "",
       password: "",
       confirmPassword: "",
     },
@@ -75,7 +77,7 @@ export function Signup() {
       const response = await signup({
         username: data.name,
         email: data.email,
-        phone: data.phone,
+        phone: data.phone || undefined,
         password: data.password,
         repeatedPassword: data.password,
       });
@@ -184,7 +186,7 @@ export function Signup() {
       <CardFooter className="flex-col gap-2">
         <p>
           Aveți deja un cont?{" "}
-          <Link href="/login" className="text-green-400 hover:underline">
+          <Link href="/sign-in" className="text-green-400 hover:underline">
             Conectează-te
           </Link>
         </p>
