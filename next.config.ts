@@ -1,10 +1,6 @@
 import type {NextConfig} from "next";
 
-const nextConfig: NextConfig = {
-  turbopack: {
-    root: "C:\\Users\\dorin\\OneDrive\\Desktop\\petwell\\petwell_web",
-  },
-  /* config options here */
-};
+// ponytail: no turbopack.root, Next infers it; a hardcoded Windows path broke dev on macOS.
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
